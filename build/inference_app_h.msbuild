@@ -2,6 +2,8 @@
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003"> 
 
 <ItemGroup>	
+<ClInclude Include = "..\src\inference\private\egl.h"/>	
+<ClInclude Include = "..\src\inference\private\model.h"/>	
 <ClInclude Include = "..\src\inference\private\opencv_bridge.h"/>	
 <ClInclude Include = "..\src\inference\private\pch.h"/>	
 <ClInclude Include = "..\src\inference\private\tensorflow_lite_c_api.h"/>	
