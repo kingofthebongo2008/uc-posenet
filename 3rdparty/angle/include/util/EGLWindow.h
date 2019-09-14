@@ -7,9 +7,6 @@
 #ifndef UTIL_EGLWINDOW_H_
 #define UTIL_EGLWINDOW_H_
 
-#include <EGL/eglext.h>
-#include <EGL/eglext_angle.h>
-
 #include <stdint.h>
 #include <list>
 #include <memory>
@@ -20,7 +17,6 @@
 #include "util/EGLPlatformParameters.h"
 #include "util/util_export.h"
 #include "util/util_gl.h"
-
 
 class OSWindow;
 
