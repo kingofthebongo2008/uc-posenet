@@ -1,5 +1,9 @@
 #pragma once
 
+#include <assert.h>
+#include <vector>
+#include "tensorflow_lite_c_api.h"
+
 struct model
 {
     tensorflow_lite_c_api::model                m_model;
@@ -174,7 +178,7 @@ void detect()
     auto dims2                  = image.dim(2);
     auto dims3                  = image.dim(3);
 
-    //auto r                        = cv::imread("data/images/military_mechanic_257x353.png");
+    //auto r                    = cv::imread("data/images/military_mechanic_257x353.png");
     auto r                      = cv::imread("data/images/military_mechanic_257x257_2.png");
     //auto r                        = cv::imread("data/images/posenet_sample.png");
     auto img                    = opencv::normalize(r); //stride 16
@@ -261,4 +265,6 @@ void detect()
         std::cout << "writing to result2.png" << std::endl;
         cv::imwrite("result2.png", r);
     }
+	*/
 }
+
