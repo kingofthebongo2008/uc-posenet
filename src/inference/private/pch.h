@@ -8,3 +8,5 @@
 #include <SDKDDKVer.h>
 
 #include <cstdint>
+#include <assert.h>
+#include <list>

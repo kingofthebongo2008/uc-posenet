@@ -3,20 +3,19 @@
 #include <iostream>
 #include <fstream>
 
-#include "tensorflow_lite_c_api.h"
+#include "egl.h"
 
-#include <tensorflow/lite/delegates/gpu/gl_delegate.h>
-
+#include "model.h"
 #include "opencv_bridge.h"
 
-#include "egl.h"
-#include <EGL/eglext.h>
-#include <EGL/eglext_angle.h>
+/*
 #include <util/EGLWindow.h>
 #include <util/OSWindow.h>
 #include <util/Event.h>
 #include "util/shader_utils.h"
 #include <common/system_utils.h>
+
+
 
 class Win32Library : public angle::Library
 {
@@ -92,11 +91,144 @@ EGLPlatformParameters make_platform_parameters()
 
 	return mPlatformParams;
 }
+*/
+
 
 int32_t main(int32_t, char*[])
 { 
+	cv::VideoCapture cap(0);
+	if (!cap.isOpened())
+	{
+		std::cerr << "Cannot open camera" << "\n";
+		return -1;
+	}
+
+	cap.set(cv::VideoCaptureProperties::CAP_PROP_FRAME_WIDTH, 257);
+	cap.set(cv::VideoCaptureProperties::CAP_PROP_FRAME_HEIGHT, 353);
+	cap.set(cv::VideoCaptureProperties::CAP_PROP_CONVERT_RGB, 1);
+
+	auto m = make_model<test_model>("data/multi_person_mobilenet_v1_075_float.tflite");
+	//auto m = make_model<test_model>("data/posenet_mobilenet_v1_100_257x257_multi_kpt_stripped.tflite");
+
+	auto inter = &m.m_interpreter;
+
+	auto output = inter->get_output_tensor_count();
+	auto intput = inter->get_input_tensor_count();
+	auto image	= tensorflow_lite_c_api::make_input_tensor(inter, 0);
+
+	auto heatmaps = tensorflow_lite_c_api::make_output_tensor(inter, 0);
+	auto offsets = tensorflow_lite_c_api::make_output_tensor(inter, 1);
+	auto displacements_forward = tensorflow_lite_c_api::make_output_tensor(inter, 2);
+	auto displacements_backward = tensorflow_lite_c_api::make_output_tensor(inter, 3);
+
+	auto dims0 = image.dim(0);
+	auto dims1 = image.dim(1);
+	auto dims2 = image.dim(2);
+	auto dims3 = image.dim(3);
+
+	for (;;)
+	{
+		cv::Mat frame;
+		// Get a new frame from camera
+		cap >> frame;
+
+		//auto r = cv::imread("data/images/military_mechanic_257x257_2.png");
+
+		auto r0 = opencv::resample(frame, 353, 257);
+		auto img = opencv::normalize(r0); //stride 16
+		auto w = opencv::width(img);
+		auto h = opencv::height(img);
+		auto s1 = opencv::byte_size(img);
+
+		auto buffer = image.byte_size();
+
+		image.copy_from_buffer(img.data, opencv::byte_size(img));
+		inter->invoke();
+
+
+		std::vector< uint8_t >      heatmaps_data = make_output_data(&heatmaps);
+		tensor_view                 heatmaps_view = make_tensor_view(&heatmaps, reinterpret_cast<float*>(&heatmaps_data[0]));
+
+		std::vector< uint8_t >      offsets_data = make_output_data(&offsets);
+		tensor_view                 offsets_view = make_tensor_view(&offsets, reinterpret_cast<float*>(&offsets_data[0]));
+
+		std::vector< uint8_t >      displacements_forward_data = make_output_data(&displacements_forward);
+		tensor_view                 displacements_forward_view = make_tensor_view(&displacements_forward, reinterpret_cast<float*>(&displacements_forward_data[0]));
+
+		std::vector< uint8_t >      displacements_backward_data = make_output_data(&displacements_backward);
+		tensor_view                 displacements_backward_view = make_tensor_view(&displacements_backward, reinterpret_cast<float*>(&displacements_backward_data[0]));
+
+		uint32_t keypoints = heatmaps.dim(3);
+		std::vector<position>       positions(keypoints);
+		std::vector<float>          sigs(keypoints);
+
+		auto width = offsets_view.m_d2;
+		auto height = offsets_view.m_d1;
+
+		for (auto i = 0U; i < keypoints; ++i)
+		{
+			float       max_value = heatmaps_view.value(0, 0, 0, i);
+			uint32_t    max_column = 0;
+			uint32_t    max_row = 0;
+
+			for (auto h = 0U; h < height; ++h)
+			{
+				for (auto w = 0U; w < width; w++)
+				{
+					float v = sigmoid(heatmaps_view.value(0, h, w, i));
+
+					if (v > max_value)
+					{
+						max_value = v;
+						max_column = w;
+						max_row = h;
+					}
+				}
+			}
+			positions[i] = { max_row, max_column };
+			sigs[i] = max_value;
+		}
+
+		std::vector<float2>     image_offsets(keypoints);
+		std::vector<position>   image_positions(keypoints);
+		std::vector<float>      confidence_scores(keypoints);
+
+		for (auto i = 0U; i < keypoints; ++i)
+		{
+			auto p = positions[i];
+
+			float2 offset;
+
+			offset.m_y = offsets_view.value(0, p.m_y, p.m_x, i);
+			offset.m_x = offsets_view.value(0, p.m_y, p.m_x, i + keypoints);
+
+			image_offsets[i] = offset;
+
+			image_positions[i].m_x = (p.m_x / (width - 1.0f)) * w + offset.m_x;
+			image_positions[i].m_y = (p.m_y / (height - 1.0f)) * h + offset.m_y;
+		}
+
+		if (true)
+		{
+			auto&& p = image_positions;
+			auto s = p.size();
+			for (auto i = 0U; i < s; ++i)
+			{
+				cv::Scalar color(255, 255, 0);
+				cv::circle(r0, cv::Point(p[i].m_x, p[i].m_y), 2, color);
+			}
+		}
+
+		// Display images    
+		imshow("frame", r0);
+		if (cv::waitKey(30) >= 0) break;
+	}
+	// Deinitialize camera in the VideoCapture destructor
+	return 0;
+
+	/*
 	std::unique_ptr<EGLWindow, EGLWindowDeleter> egl(EGLWindow::New(3, 1), EGLWindowDeleter());
-	std::unique_ptr<OSWindow, OSWindowDeleter> w(OSWindow::New(), OSWindowDeleter());
+	st8d::unique_ptr<OSWindow, OSWindowDeleter> w(OSWindow::New(), OSWindowDeleter());
 
 	Win32Library library;
 
@@ -105,16 +237,16 @@ int32_t main(int32_t, char*[])
 	bool init	= egl->initializeGL(w.get(), &library, make_platform_parameters(), make_config_parameters());
 
 	constexpr char kVS[] = R"(attribute vec4 vPosition;
-void main()
-{
-    gl_Position = vPosition;
-})";
+	void main()
+	{
+		gl_Position = vPosition;
+	})";
 
 	constexpr char kFS[] = R"(precision mediump float;
-void main()
-{
-    gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
-})";
+	void main()
+	{
+		gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+	})";
 
 	GLuint mProgram = CompileProgram(kVS, kFS);
 	if (!mProgram)
@@ -175,6 +307,7 @@ void main()
 	{
 		return 1;
 	}
+	*/
  }
 
 
