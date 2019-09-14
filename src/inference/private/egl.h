@@ -1,6 +1,12 @@
 #pragma once
 
 #include <EGL/egl.h>
+#include <EGL/eglext.h>
+#include <EGL/eglext_angle.h>
+
+#include <GLES3/gl31.h>
+
+#include <exception>
 
 namespace egl
 {
