@@ -10,7 +10,8 @@
 #include "opencv_bridge.h"
 
 #include "egl.h"
-
+#include <EGL/eglext.h>
+#include <EGL/eglext_angle.h>
 #include <util/EGLWindow.h>
 #include <util/OSWindow.h>
 #include <util/Event.h>
