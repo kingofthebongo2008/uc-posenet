@@ -12,7 +12,7 @@ namespace tensorflow_lite_c_api
 
         input_tensor() = default;
 
-        input_tensor(TFL_Tensor* m) : m_value(m)
+        input_tensor(TfLiteTensor* m) : m_value(m)
         {
         }
 
@@ -23,38 +23,38 @@ namespace tensorflow_lite_c_api
 
         void copy_from_buffer(const void* input_data, size_t input_data_size)
         {
-            throw_if_failed(TFL_TensorCopyFromBuffer(m_value, input_data, input_data_size));
+            throw_if_failed(TfLiteTensorCopyFromBuffer(m_value, input_data, input_data_size));
 
         }
 
         void copy_to_buffer(void* output_data, size_t output_data_size)
         {
-            throw_if_failed(TFL_TensorCopyToBuffer(m_value, output_data, output_data_size));
+            throw_if_failed(TfLiteTensorCopyToBuffer(m_value, output_data, output_data_size));
         }
 
         size_t byte_size() const
         {
-            return TFL_TensorByteSize(m_value);
+            return TfLiteTensorByteSize(m_value);
         }
 
         int32_t num_dims() const
         {
-            return TFL_TensorNumDims(m_value);
+            return TfLiteTensorNumDims(m_value);
         }
 
         int32_t dim(int32_t dim_index) const
         {
-            return TFL_TensorDim(m_value, dim_index);
+            return TfLiteTensorDim(m_value, dim_index);
         }
 
-        TFL_Type type() const
+        TfLiteType type() const
         {
-            return TFL_TensorType(m_value);
+            return TfLiteTensorType(m_value);
         }
 
     private:
 
-        TFL_Tensor * m_value = nullptr;
+        TfLiteTensor * m_value = nullptr;
     };
 
     class output_tensor
@@ -64,7 +64,7 @@ namespace tensorflow_lite_c_api
 
         output_tensor() = default;
 
-        output_tensor(const TFL_Tensor* m) : m_value(m)
+        output_tensor(const TfLiteTensor* m) : m_value(m)
         {
 
         }
@@ -75,31 +75,31 @@ namespace tensorflow_lite_c_api
 
         void copy_to_buffer(void* output_data, size_t output_data_size) const
         {
-            throw_if_failed(TFL_TensorCopyToBuffer(m_value, output_data, output_data_size));
+            throw_if_failed(TfLiteTensorCopyToBuffer(m_value, output_data, output_data_size));
         }
 
         size_t byte_size() const
         {
-            return TFL_TensorByteSize(m_value);
+            return TfLiteTensorByteSize(m_value);
         }
 
         int32_t num_dims() const
         {
-            return TFL_TensorNumDims(m_value);
+            return TfLiteTensorNumDims(m_value);
         }
 
         int32_t dim(int32_t dim_index) const
         {
-            return TFL_TensorDim(m_value, dim_index);
+            return TfLiteTensorDim(m_value, dim_index);
         }
 
-        TFL_Type type() const
+        TfLiteType type() const
         {
-            return TFL_TensorType(m_value);
+            return TfLiteTensorType(m_value);
         }
 
     private:
 
-        const TFL_Tensor * m_value = nullptr;
+        const TfLiteTensor * m_value = nullptr;
     };
 }

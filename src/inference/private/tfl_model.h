@@ -12,13 +12,13 @@ namespace tensorflow_lite_c_api
 
         model(const void* d, size_t s)
         {
-            m_value = TFL_NewModel(d, s);
+            m_value = TfLiteModelCreate(d, s);
             throw_if_failed_value(m_value);
         }
 
         model(const char* file_name)
         {
-            m_value = TFL_NewModelFromFile(file_name);
+            m_value = TfLiteModelCreateFromFile(file_name);
             throw_if_failed_value(m_value);
         }
 
@@ -26,7 +26,7 @@ namespace tensorflow_lite_c_api
         {
             if (m_value)
             {
-                TFL_DeleteModel(m_value);
+				TfLiteModelDelete(m_value);
             }
         }
 
@@ -45,12 +45,12 @@ namespace tensorflow_lite_c_api
             }
         }
 
-        operator TFL_Model *() const
+        operator TfLiteModel *() const
         {
             return m_value;
         }
 
     private:
-        TFL_Model* m_value = nullptr;
+		TfLiteModel* m_value = nullptr;
     };
 }

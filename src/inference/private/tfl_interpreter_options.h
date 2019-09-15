@@ -12,7 +12,7 @@ namespace tensorflow_lite_c_api
 
         interpreter_options()
         {
-            m_value = TFL_NewInterpreterOptions();
+            m_value = TfLiteInterpreterOptionsCreate();
             throw_if_failed_value(m_value);
         }
 
@@ -20,7 +20,7 @@ namespace tensorflow_lite_c_api
         {
             if (m_value)
             {
-                TFL_DeleteInterpreterOptions(m_value);
+				TfLiteInterpreterOptionsDelete(m_value);
             }
         }
 
@@ -41,15 +41,15 @@ namespace tensorflow_lite_c_api
 
         void set_num_threads(int32_t threads)
         {
-            TFL_InterpreterOptionsSetNumThreads(m_value, threads);
+			TfLiteInterpreterOptionsSetNumThreads(m_value, threads);
         }
         
-        operator TFL_InterpreterOptions *() const
+        operator TfLiteInterpreterOptions*() const
         {
             return m_value;
         }
 
     private:
-        TFL_InterpreterOptions* m_value = nullptr;
+		TfLiteInterpreterOptions* m_value = nullptr;
     };
 }

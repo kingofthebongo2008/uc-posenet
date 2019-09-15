@@ -13,7 +13,7 @@ namespace tensorflow_lite_c_api
 
     public:
 
-    exception(const TFL_Status  s) : m_status(s)
+    exception(const TfLiteStatus  s) : m_status(s)
     {
 
     }
@@ -24,11 +24,11 @@ namespace tensorflow_lite_c_api
     }
 
     private:
-        TFL_Status m_status;
+		TfLiteStatus m_status;
         
     };
 
-    inline void throw_if_failed( const TFL_Status s )
+    inline void throw_if_failed( const TfLiteStatus s )
     {
         if (s != kTfLiteOk)
         {

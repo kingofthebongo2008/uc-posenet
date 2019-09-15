@@ -45,7 +45,7 @@ inline t make_model(const char* model_file, TfLiteDelegate* delegate = nullptr)
     //o.set_num_threads(1);
     if (delegate)
     {
-        TFL_InterpreterOptionsAddDelegate(o, delegate);
+        TfLiteInterpreterOptionsAddDelegate(o, delegate);
     }
     tensorflow_lite_c_api::interpreter          i(m, o);
     i.allocate_tensors();
