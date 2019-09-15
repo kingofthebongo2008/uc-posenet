@@ -225,7 +225,8 @@ int32_t main(int32_t, char*[])
 	}
 	// Deinitialize camera in the VideoCapture destructor
 	return 0;
-
+	
+	//Visualization code
 	/*
 	std::unique_ptr<EGLWindow, EGLWindowDeleter> egl(EGLWindow::New(3, 1), EGLWindowDeleter());
 	st8d::unique_ptr<OSWindow, OSWindowDeleter> w(OSWindow::New(), OSWindowDeleter());
