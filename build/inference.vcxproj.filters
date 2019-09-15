@@ -127,5 +127,28 @@
     <None Include="$(MSBuildThisFileDirectory)\bin\win-x64\*.dll" />
     <None Include="$(MSBuildThisFileDirectory)\bin\win-x64\*.dll" />
     <None Include="$(MSBuildThisFileDirectory)\bin\win-x64\*.dll" />
+    <None Include="$(MSBuildThisFileDirectory)\bin\win-x64\*.so" />
+    <None Include="$(MSBuildThisFileDirectory)\bin\win-x64\*.so" />
+    <None Include="$(MSBuildThisFileDirectory)\bin\win-x64\*.pdb" />
+    <None Include="$(MSBuildThisFileDirectory)\bin\win-x64\*.pdb" />
+    <None Include="$(MSBuildThisFileDirectory)\bin\win-x64\*.dll" />
+    <None Include="$(MSBuildThisFileDirectory)\bin\win-x64\*.dll" />
+    <None Include="$(MSBuildThisFileDirectory)\bin\win-x64\*.dll" />
+    <None Include="$(MSBuildThisFileDirectory)\bin\win-x64\*.dll" />
+    <None Include="$(MSBuildThisFileDirectory)\bin\win-x64\*.dll" />
+    <None Include="$(MSBuildThisFileDirectory)\bin\win-x64\*.dll" />
+    <None Include="$(MSBuildThisFileDirectory)\bin\win-x64\*.dll" />
+    <None Include="$(MSBuildThisFileDirectory)\bin\win-x64\*.dll" />
+    <None Include="$(MSBuildThisFileDirectory)\bin\win-x64\*.dll" />
+    <None Include="$(MSBuildThisFileDirectory)\bin\win-x64\*.dll" />
+    <None Include="$(MSBuildThisFileDirectory)\bin\win-x64\*.dll" />
+    <None Include="$(MSBuildThisFileDirectory)\bin\win-x64\*.dll" />
+    <None Include="$(MSBuildThisFileDirectory)\bin\win-x64\*.dll" />
+    <None Include="$(MSBuildThisFileDirectory)\bin\win-x64\*.dll" />
+    <None Include="$(MSBuildThisFileDirectory)\bin\win-x64\*.dll" />
+    <None Include="$(MSBuildThisFileDirectory)\bin\win-x64\*.dll" />
+    <None Include="$(MSBuildThisFileDirectory)\bin\win-x64\*.dll" />
+    <None Include="$(MSBuildThisFileDirectory)\bin\win-x64\*.dll" />
+    <None Include="$(MSBuildThisFileDirectory)\bin\win-x64\*.dll" />
   </ItemGroup>
 </Project>
