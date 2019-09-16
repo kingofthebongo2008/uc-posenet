@@ -4,6 +4,7 @@
   <Import Project="packages\opencv.4.0.3\build\native\opencv.props" Condition="Exists('packages\opencv.4.0.3\build\native\opencv.props')" />
   <Import Project="packages\khronos-angle-egl.1.0.0.5\build\native\egl.props" Condition="Exists('packages\khronos-angle-egl.1.0.0.5\build\native\egl.props')" />
   <Import Project="packages\khronos-angle-gles.1.0.0.6\build\native\gles2.props" Condition="Exists('packages\khronos-angle-gles.1.0.0.6\build\native\gles2.props')" />
+  <Import Project="packages\khronos-khr.1.0.4\build\native\khr.props" Condition="Exists('packages\khronos-khr.1.0.4\build\native\khr.props')" />
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="release|x64">
       <Configuration>release</Configuration>
@@ -68,6 +69,7 @@
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="packages\khronos-khr.1.0.4\build\native\khr.targets" Condition="Exists('packages\khronos-khr.1.0.4\build\native\khr.targets')" />
     <Import Project="packages\khronos-angle-egl.1.0.0.5\build\native\egl.targets" Condition="Exists('packages\khronos-angle-egl.1.0.0.5\build\native\egl.targets')" />
     <Import Project="packages\khronos-angle-gles.1.0.0.6\build\native\gles2.targets" Condition="Exists('packages\khronos-angle-gles.1.0.0.6\build\native\gles2.targets')" />
     <Import Project="packages\opencv.4.0.3\build\native\opencv.targets" Condition="Exists('packages\opencv.4.0.3\build\native\opencv.targets')" />
@@ -79,6 +81,8 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
+    <Error Condition="!Exists('packages\khronos-khr.1.0.4\build\native\khr.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\khronos-khr.1.0.4\build\native\khr.props'))" />
+    <Error Condition="!Exists('packages\khronos-khr.1.0.4\build\native\khr.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\khronos-khr.1.0.4\build\native\khr.targets'))" />
     <Error Condition="!Exists('packages\khronos-angle-egl.1.0.0.5\build\native\egl.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\khronos-angle-egl.1.0.0.5\build\native\egl.props'))" />
     <Error Condition="!Exists('packages\khronos-angle-egl.1.0.0.5\build\native\egl.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\khronos-angle-egl.1.0.0.5\build\native\egl.targets'))" />
     <Error Condition="!Exists('packages\khronos-angle-gles.1.0.0.6\build\native\gles2.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\khronos-angle-gles.1.0.0.6\build\native\gles2.props'))" />
