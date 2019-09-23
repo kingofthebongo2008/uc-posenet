@@ -49,9 +49,9 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
-      <AdditionalIncludeDirectories>../3rdparty/angle/include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp14</LanguageStandard>
       <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>../3rdparty/angle/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -66,7 +66,7 @@
   <ImportGroup Label="ExtensionTargets">
     <Import Project="packages\khronos-khr.1.0.4\build\native\khr.targets" Condition="Exists('packages\khronos-khr.1.0.4\build\native\khr.targets')" />
     <Import Project="packages\khronos-angle-egl.1.0.0.5\build\native\egl.targets" Condition="Exists('packages\khronos-angle-egl.1.0.0.5\build\native\egl.targets')" />
-    <Import Project="packages\khronos-angle-gles.1.0.0.6\build\native\gles2.targets" Condition="Exists('packages\khronos-angle-gles.1.0.0.6\build\native\gles2.targets')" />
+    <Import Project="packages\khronos-angle-gles.1.0.0.7\build\native\gles2.targets" Condition="Exists('packages\khronos-angle-gles.1.0.0.7\build\native\gles2.targets')" />
     <Import Project="packages\opencv.4.0.3\build\native\opencv.targets" Condition="Exists('packages\opencv.4.0.3\build\native\opencv.targets')" />
     <Import Project="packages\tensorflow-lite.2.0.0.9\build\native\tensorflow-lite.targets" Condition="Exists('packages\tensorflow-lite.2.0.0.9\build\native\tensorflow-lite.targets')" />
   </ImportGroup>
@@ -76,6 +76,12 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
+    <Error Condition="!Exists('packages\khronos-khr.1.0.4\build\native\khr.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\khronos-khr.1.0.4\build\native\khr.targets'))" />
+    <Error Condition="!Exists('packages\khronos-khr.1.0.4\build\native\khr.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\khronos-khr.1.0.4\build\native\khr.props'))" />
+    <Error Condition="!Exists('packages\khronos-angle-egl.1.0.0.5\build\native\egl.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\khronos-angle-egl.1.0.0.5\build\native\egl.props'))" />
+    <Error Condition="!Exists('packages\khronos-angle-egl.1.0.0.5\build\native\egl.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\khronos-angle-egl.1.0.0.5\build\native\egl.targets'))" />
+    <Error Condition="!Exists('packages\khronos-angle-gles.1.0.0.7\build\native\gles2.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\khronos-angle-gles.1.0.0.7\build\native\gles2.props'))" />
+    <Error Condition="!Exists('packages\khronos-angle-gles.1.0.0.7\build\native\gles2.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\khronos-angle-gles.1.0.0.7\build\native\gles2.targets'))" />
     <Error Condition="!Exists('packages\opencv.4.0.3\build\native\opencv.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\opencv.4.0.3\build\native\opencv.props'))" />
     <Error Condition="!Exists('packages\opencv.4.0.3\build\native\opencv.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\opencv.4.0.3\build\native\opencv.targets'))" />
     <Error Condition="!Exists('packages\tensorflow-lite.2.0.0.9\build\native\tensorflow-lite.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\tensorflow-lite.2.0.0.9\build\native\tensorflow-lite.props'))" />
