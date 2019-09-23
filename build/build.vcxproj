@@ -70,6 +70,13 @@
     <Import Project="packages\opencv.4.0.3\build\native\opencv.targets" Condition="Exists('packages\opencv.4.0.3\build\native\opencv.targets')" />
     <Import Project="packages\tensorflow-lite.2.0.0.9\build\native\tensorflow-lite.targets" Condition="Exists('packages\tensorflow-lite.2.0.0.9\build\native\tensorflow-lite.targets')" />
   </ImportGroup>
+
+  <Import Project="packages\khronos-khr.1.0.4\build\native\khr.props" Condition="Exists('packages\khronos-khr.1.0.4\build\native\khr.props')" />
+  <Import Project="packages\khronos-angle-egl.1.0.0.5\build\native\egl.props" Condition="Exists('packages\khronos-angle-egl.1.0.0.5\build\native\egl.props')" />
+  <Import Project="packages\khronos-angle-gles.1.0.0.7\build\native\gles2.props" Condition="Exists('packages\khronos-angle-gles.1.0.0.7\build\native\gles2.props')" />
+  <Import Project="packages\opencv.4.0.3\build\native\opencv.props" Condition="Exists('packages\opencv.4.0.3\build\native\opencv.props')" />
+  <Import Project="packages\tensorflow-lite.2.0.0.9\build\native\tensorflow-lite.props" Condition="Exists('packages\tensorflow-lite.2.0.0.9\build\native\tensorflow-lite.props')" />
+ 
   <Import Project="build_app_h.msbuild" />
   <Import Project="build_app_cpp.msbuild" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
