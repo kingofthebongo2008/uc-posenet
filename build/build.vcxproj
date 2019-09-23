@@ -70,8 +70,8 @@
     <Import Project="packages\opencv.4.0.3\build\native\opencv.targets" Condition="Exists('packages\opencv.4.0.3\build\native\opencv.targets')" />
     <Import Project="packages\tensorflow-lite.2.0.0.9\build\native\tensorflow-lite.targets" Condition="Exists('packages\tensorflow-lite.2.0.0.9\build\native\tensorflow-lite.targets')" />
   </ImportGroup>
-  <Import Project="inference_app_h.msbuild" />
-  <Import Project="inference_app_cpp.msbuild" />
+  <Import Project="build_app_h.msbuild" />
+  <Import Project="build_app_cpp.msbuild" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
