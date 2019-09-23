@@ -141,8 +141,8 @@ static float sigmoid(float x)
 
 struct position
 {
-    uint32_t m_y;
-    uint32_t m_x;
+    float m_y;
+    float m_x;
 };
 
 struct float2

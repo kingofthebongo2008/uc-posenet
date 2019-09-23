@@ -8,6 +8,8 @@
 #include "model.h"
 #include "opencv_bridge.h"
 
+#include <tensorflow/lite/delegates/gpu/gl_delegate.h>
+
 /*
 #include <util/EGLWindow.h>
 #include <util/OSWindow.h>
@@ -107,7 +109,13 @@ int32_t main(int32_t, char*[])
 	cap.set(cv::VideoCaptureProperties::CAP_PROP_FRAME_HEIGHT, 353);
 	cap.set(cv::VideoCaptureProperties::CAP_PROP_CONVERT_RGB, 1);
 
-	auto m = make_model<test_model>("data/multi_person_mobilenet_v1_075_float.tflite");
+	TfLiteDelegate* d;
+	const TfLiteGpuDelegateOptions options = { nullptr, { 1, TFLITE_GL_OBJECT_TYPE_FASTEST, 0 }, };
+
+	d = TfLiteGpuDelegateCreate(&options);
+
+	//https://storage.googleapis.com/tfjs-models/demos/posenet/camera.html
+	auto m = make_model<test_model>("data/multi_person_mobilenet_v1_075_float.tflite", nullptr);
 	//auto m = make_model<test_model>("data/posenet_mobilenet_v1_100_257x257_multi_kpt_stripped.tflite");
 
 	auto inter = &m.m_interpreter;
@@ -145,7 +153,6 @@ int32_t main(int32_t, char*[])
 		image.copy_from_buffer(img.data, opencv::byte_size(img));
 		inter->invoke();
 
-
 		std::vector< uint8_t >      heatmaps_data = make_output_data(&heatmaps);
 		tensor_view                 heatmaps_view = make_tensor_view(&heatmaps, reinterpret_cast<float*>(&heatmaps_data[0]));
 
@@ -162,8 +169,8 @@ int32_t main(int32_t, char*[])
 		std::vector<position>       positions(keypoints);
 		std::vector<float>          sigs(keypoints);
 
-		auto width = offsets_view.m_d2;
-		auto height = offsets_view.m_d1;
+		auto width					= offsets_view.m_d2;
+		auto height					= offsets_view.m_d1;
 
 		for (auto i = 0U; i < keypoints; ++i)
 		{
@@ -185,8 +192,9 @@ int32_t main(int32_t, char*[])
 					}
 				}
 			}
-			positions[i] = { max_row, max_column };
-			sigs[i] = max_value;
+
+			positions[i]	= { static_cast<float>(max_row), static_cast<float>(max_column) };
+			sigs[i]			= max_value;
 		}
 
 		std::vector<float2>     image_offsets(keypoints);
@@ -211,11 +219,15 @@ int32_t main(int32_t, char*[])
 		if (true)
 		{
 			auto&& p = image_positions;
+			auto&& c = sigs;
 			auto s = p.size();
 			for (auto i = 0U; i < s; ++i)
 			{
-				cv::Scalar color(255, 255, 0);
-				cv::circle(r0, cv::Point(p[i].m_x, p[i].m_y), 2, color);
+				if (c[i] > 0.5)
+				{
+					cv::Scalar color(255, 255, 0);
+					cv::circle(r0, cv::Point(p[i].m_x, p[i].m_y), 2, color);
+				}
 			}
 		}
 
